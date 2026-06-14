@@ -1,15 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SaveBar from '../../components/admin/SaveBar';
-import type { NavItem, SiteConfig } from '../../lib/types/content';
+import { hexToRgb, rgbToHex } from '../../lib/format';
+import { DEFAULT_ACCENT, type NavItem, type SiteConfig } from '../../lib/types/content';
 import { getSite, saveSite } from '../../services/contentStore';
 
 export default function SiteSettings() {
   const [config, setConfig] = useState<SiteConfig | null>(null);
+  const savedRef = useRef('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
-    setConfig(getSite());
+    const loaded = getSite();
+    setConfig(loaded);
+    savedRef.current = JSON.stringify(loaded);
   }, []);
 
   const updateNav = (index: number, item: NavItem) => {
@@ -19,12 +23,16 @@ export default function SiteSettings() {
     setConfig({ ...config, nav });
   };
 
+  const dirty = config ? JSON.stringify(config) !== savedRef.current : false;
+  const accent = config?.theme?.accent ?? DEFAULT_ACCENT;
+
   const save = () => {
     if (!config) return;
     setMessage('');
     setError('');
     try {
       saveSite(config);
+      savedRef.current = JSON.stringify(config);
       setMessage('Saved.');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Save failed.');
@@ -47,6 +55,29 @@ export default function SiteSettings() {
             className="admin-input"
             value={config.siteName}
             onChange={(e) => setConfig({ ...config, siteName: e.target.value })}
+          />
+        </label>
+      </fieldset>
+
+      <fieldset className="admin-panel">
+        <legend>Theme</legend>
+        <label className="admin-field admin-field--color">
+          <span className="admin-field__label">Accent</span>
+          <input
+            className="admin-input admin-input--color"
+            type="color"
+            value={rgbToHex(accent)}
+            onChange={(e) =>
+              setConfig({
+                ...config,
+                theme: { accent: hexToRgb(e.target.value) },
+              })
+            }
+          />
+          <span
+            className="admin-swatch"
+            style={{ background: `rgb(${accent})` }}
+            aria-hidden="true"
           />
         </label>
       </fieldset>
@@ -75,7 +106,7 @@ export default function SiteSettings() {
         ))}
       </fieldset>
 
-      <SaveBar onSave={save} message={message} error={error} />
+      <SaveBar onSave={save} dirty={dirty} message={message} error={error} />
     </div>
   );
 }

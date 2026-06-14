@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   getHeroSection,
@@ -16,13 +16,18 @@ import { getPage, savePage } from '../../services/contentStore';
 export default function PageEdit() {
   const { pageId = '' } = useParams<{ pageId: string }>();
   const [page, setPage] = useState<PageDocument | null>(null);
+  const savedRef = useRef('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (!pageId) return;
-    setPage(getPage(pageId));
+    const loaded = getPage(pageId);
+    setPage(loaded);
+    savedRef.current = JSON.stringify(loaded);
   }, [pageId]);
+
+  const dirty = page ? JSON.stringify(page) !== savedRef.current : false;
 
   const save = () => {
     if (!page || !pageId) return;
@@ -30,6 +35,7 @@ export default function PageEdit() {
     setError('');
     try {
       savePage(pageId, page);
+      savedRef.current = JSON.stringify(page);
       setMessage('Saved.');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Save failed.');
@@ -66,7 +72,7 @@ export default function PageEdit() {
         }
       />
 
-      <SaveBar onSave={save} message={message} error={error} />
+      <SaveBar onSave={save} dirty={dirty} message={message} error={error} />
     </div>
   );
 }

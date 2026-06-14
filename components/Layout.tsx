@@ -1,16 +1,26 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useContent } from '../hooks/useContent';
+import { useTheme } from '../hooks/useTheme';
 import SiteFooter from './SiteFooter';
 
+function brandParts(name: string): [string, string] {
+  const words = name.trim().split(/\s+/);
+  if (words.length < 2) return [name, ''];
+  return [words[0], words.slice(1).join(' ')];
+}
+
 export default function Layout() {
+  useTheme();
   const { site } = useContent();
+  const [primary, accent] = brandParts(site.siteName);
 
   return (
     <>
       <header className="site-header">
         <nav className="site-nav" aria-label="Primary">
           <NavLink to="/" className="site-brand" end>
-            north<em>line</em>
+            {primary}
+            {accent ? <em>{accent}</em> : null}
           </NavLink>
           <ul className="site-nav-links">
             {site.nav.map((item) => (
@@ -24,7 +34,7 @@ export default function Layout() {
         </nav>
       </header>
       <Outlet />
-      <SiteFooter />
+      <SiteFooter siteName={site.siteName} />
     </>
   );
 }

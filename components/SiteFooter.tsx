@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export default function SiteFooter() {
+export default function SiteFooter({ siteName }: { siteName: string }) {
   const year = new Date().getFullYear();
   return (
     <footer className="site-footer">
@@ -15,6 +15,7 @@ export default function SiteFooter() {
         {' · '}
         <Link to="/admin">Admin demo</Link>
       </p>
+      <p className="site-tagline">{siteName} — React 19 CMS demo</p>
     </footer>
   );
 }

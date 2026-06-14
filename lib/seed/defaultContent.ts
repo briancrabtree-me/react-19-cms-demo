@@ -8,7 +8,13 @@ export const defaultContent: ContentBundle = {
       { label: 'About', path: '/about' },
       { label: 'Blog', path: '/blog' },
     ],
+    theme: { accent: '204 255 0' },
   },
+  meta: {
+    updatedAt: '2026-06-01T12:00:00.000Z',
+    revision: 1,
+  },
+  activity: [],
   pages: {
     home: {
       id: 'home',

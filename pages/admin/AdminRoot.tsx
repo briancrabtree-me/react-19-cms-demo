@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AdminAppShell from '../../components/admin/AdminAppShell';
 import AdminLogin from '../../components/admin/AdminLogin';
+import { useTheme } from '../../hooks/useTheme';
 import { isAuthenticated, logout } from '../../services/auth';
 import '../../styles/admin.css';
 
@@ -17,6 +18,7 @@ function AdminFallback() {
 }
 
 export default function AdminRoot() {
+  useTheme();
   const [authed, setAuthed] = useState<boolean | null>(null);
 
   useEffect(() => {

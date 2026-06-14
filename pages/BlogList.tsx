@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { formatDate } from '../lib/format';
 import { useContent } from '../hooks/useContent';
 
 export default function BlogList() {
@@ -11,23 +12,25 @@ export default function BlogList() {
 
   return (
     <main className="site-main blog-page">
-      <h1>Blog</h1>
-      <ul className="blog-list">
+      <header className="blog-page__header">
+        <h1>Blog</h1>
+        <p className="hero-lead">Notes on shipping fast front-ends.</p>
+      </header>
+      <div className="feature-grid blog-grid">
         {postOrder.map((slug) => {
           const post = posts[slug];
           if (!post) return null;
           return (
-            <li key={slug} className="blog-list__item">
-              <Link to={`/blog/${slug}`} className="blog-list__link">
-                <span className="blog-list__title">{post.title}</span>
-                <span className="blog-list__meta">
-                  {post.publishedAt} · {post.excerpt}
-                </span>
-              </Link>
-            </li>
+            <article key={slug} className="feature-card post-card">
+              <p className="post-card__meta">{formatDate(post.publishedAt)}</p>
+              <h2 className="post-card__title">
+                <Link to={`/blog/${slug}`}>{post.title}</Link>
+              </h2>
+              <p>{post.excerpt}</p>
+            </article>
           );
         })}
-      </ul>
+      </div>
     </main>
   );
 }

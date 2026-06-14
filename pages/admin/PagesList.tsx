@@ -9,16 +9,32 @@ export default function PagesList() {
       <header className="admin-page__header">
         <h1>Pages</h1>
       </header>
-      <ul className="admin-list">
-        {pages.map((page) => (
-          <li key={page.id}>
-            <Link to={`/admin/pages/${page.id}`} className="admin-list__link">
-              <span className="admin-list__title">{page.seo.title}</span>
-              <span className="admin-list__meta">{page.id}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="admin-table-wrap">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">ID</th>
+              <th scope="col">SEO title</th>
+              <th scope="col">Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pages.map((page) => (
+              <tr key={page.id}>
+                <td>{page.seo.title}</td>
+                <td>
+                  <code>{page.id}</code>
+                </td>
+                <td>{page.seo.title.length} chars</td>
+                <td>
+                  <Link to={`/admin/pages/${page.id}`}>Edit</Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

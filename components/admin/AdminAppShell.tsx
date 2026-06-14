@@ -1,11 +1,19 @@
-import { NavLink, Outlet, Link } from 'react-router-dom';
+import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
+import { useContent } from '../../hooks/useContent';
 import { ADMIN_NAV } from '../../pages/admin/adminNav';
 
 export default function AdminAppShell({ onLogout }: { onLogout: () => void }) {
+  const { site } = useContent();
+  const location = useLocation();
+  const isDashboard =
+    location.pathname === '/admin' || location.pathname.endsWith('/admin/');
+
   return (
     <div className="admin-shell">
       <header className="admin-topbar">
-        <span className="admin-topbar__brand">CMS Admin</span>
+        <span className="admin-topbar__brand">
+          {site.siteName} · Admin
+        </span>
         <div className="admin-topbar__actions">
           <Link to="/" className="admin-link">
             View site
@@ -30,7 +38,7 @@ export default function AdminAppShell({ onLogout }: { onLogout: () => void }) {
             </NavLink>
           ))}
         </nav>
-        <main className="admin-main">
+        <main className={`admin-main${isDashboard ? ' admin-main--wide' : ''}`}>
           <Outlet />
         </main>
       </div>

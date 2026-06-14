@@ -10,5 +10,9 @@ export default function About() {
     document.title = page.seo.title;
   }, [page.seo.title]);
 
-  return <PageRenderer page={page} />;
+  return (
+    <main className="site-main">
+      <PageRenderer page={page} />
+    </main>
+  );
 }

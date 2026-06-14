@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import SaveBar from '../../components/admin/SaveBar';
 import SeoFields from '../../components/admin/SeoFields';
@@ -22,13 +22,18 @@ export default function BlogEdit() {
   const isNew = slug === 'new';
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPost | null>(isNew ? emptyPost() : null);
+  const savedRef = useRef(isNew ? JSON.stringify(emptyPost()) : '');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (isNew || !slug) return;
-    setPost(getPost(slug));
+    const loaded = getPost(slug);
+    setPost(loaded);
+    savedRef.current = JSON.stringify(loaded);
   }, [slug, isNew]);
+
+  const dirty = post ? JSON.stringify(post) !== savedRef.current : false;
 
   const save = () => {
     if (!post) return;
@@ -36,6 +41,7 @@ export default function BlogEdit() {
     setError('');
     try {
       savePost(post);
+      savedRef.current = JSON.stringify(post);
       if (isNew) {
         navigate(`/admin/blog/${post.slug}`);
       } else {
@@ -109,7 +115,7 @@ export default function BlogEdit() {
 
       <SeoFields seo={post.seo} onChange={(seo) => setPost({ ...post, seo })} />
 
-      <SaveBar onSave={save} message={message} error={error} />
+      <SaveBar onSave={save} dirty={dirty} message={message} error={error} />
     </div>
   );
 }
