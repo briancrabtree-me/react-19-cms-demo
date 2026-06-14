@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function SiteFooter() {
   const year = new Date().getFullYear();
   return (
@@ -11,7 +13,7 @@ export default function SiteFooter() {
           GitHub
         </a>
         {' · '}
-        <a href="/admin">Admin</a>
+        <Link to="/admin">Admin demo</Link>
       </p>
     </footer>
   );
