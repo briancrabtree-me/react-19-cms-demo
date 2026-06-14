@@ -1,63 +1,37 @@
 # Architecture
 
-## Overview
+Public site + admin, same pattern as the private CMS engine — minus the server.
 
-Single-page app with two surfaces:
+## Storage
 
-1. **Public routes** — marketing pages and blog, rendered from `contentStore`
-2. **Admin routes** — lazy-loaded CRUD UI at `/admin/*`
+One JSON blob in `localStorage` (`cms-demo:v1`). `contentStore.ts` reads/writes it and pings subscribers. Seed JSON lives in `lib/seed/defaultContent.ts`.
 
-Both read and write the same `localStorage` blob (`cms-demo:v1`). A lightweight pub/sub notifies React components when content changes.
-
-## Data model
-
-```typescript
-ContentBundle = {
-  site: { siteName, nav[] }
-  pages: { home, about }   // fixed IDs, edit-only
-  posts: { [slug]: BlogPost }
-  postOrder: string[]
-}
-```
-
-See `lib/types/content.ts` and seed data in `lib/seed/defaultContent.ts`.
-
-## Store API
-
-| Function | Purpose |
-|----------|---------|
-| `getContent()` | Snapshot of full bundle |
-| `subscribe(fn)` | Re-render hook for React |
-| `saveSite(config)` | Update site name + nav |
-| `getPage(id)` / `savePage(id, page)` | Page edit |
-| `listPosts()` / `getPost(slug)` | Blog read |
-| `savePost(post)` / `deletePost(slug)` | Blog CRUD |
-| `resetToSeed()` | Restore demo defaults |
+Fixed pages: `home`, `about`. Blog is full CRUD. Site config drives nav labels and paths.
 
 ## Routes
 
-| Path | Component |
-|------|-----------|
-| `/` | Home (page `home`) |
-| `/about` | About (page `about`) |
-| `/blog` | Blog index |
-| `/blog/:slug` | Blog post |
-| `/admin` | Dashboard |
-| `/admin/pages/:pageId` | Page editor |
-| `/admin/blog`, `/admin/blog/new`, `/admin/blog/:slug` | Blog admin |
-| `/admin/site` | Site settings |
+Public: `/`, `/about`, `/blog`, `/blog/:slug`.
 
-## Auth
+Admin (lazy): dashboard, pages, blog, site. Password gate in `sessionStorage` — demo only.
 
-Demo gate only — password `demo` stored in `sessionStorage` (`cms-demo-auth`). Not production auth.
+## Bundling
 
-## Swapping localStorage for an API
+`core-ui` — react, react-dom, react-router-dom.
 
-Replace functions in `services/contentStore.ts` with `fetch` calls. Keep the same function signatures so admin pages stay unchanged. Use `subscribe` to poll or wire WebSocket/SSE updates.
+`admin-ui` — everything under `pages/admin` and `components/admin`. Loaded when you hit `/admin`.
 
-## Build
+`BrowserRouter` basename comes from `import.meta.env.BASE_URL` for GitHub Pages subpath deploys.
 
-- Vite 5 + React 19
-- `core-ui` chunk: react, react-dom, react-router-dom
-- `admin-ui` chunk: admin pages + components
-- `VITE_BASE_PATH` required for GitHub Pages subpath deploy
+## React 19 in the demo
+
+- `useActionState` — admin login
+- Lazy admin route tree
+- `useContent` — `subscribe` + `useState`, no external store package
+
+Replace `contentStore.ts` with fetch when you wire a backend. Keep the function names; admin pages won't care.
+
+## Env
+
+| Variable | Purpose |
+|----------|---------|
+| `VITE_BASE_PATH` | Vite `base` (e.g. `/react-19-cms-demo/`) |

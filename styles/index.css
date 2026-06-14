@@ -183,10 +183,6 @@ a:hover {
   margin: 0 0 var(--gap-md);
 }
 
-.blog-header {
-  margin-bottom: var(--gap-xl);
-}
-
 .blog-list {
   list-style: none;
   margin: 0;

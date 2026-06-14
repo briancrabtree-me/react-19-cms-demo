@@ -1,7 +1,7 @@
 {
   "name": "react-19-cms-demo",
   "version": "1.0.0",
-  "description": "Vite + React 19 CMS demo with localStorage persistence and admin CRUD",
+  "description": "Vite + React 19 CMS demo — public site, admin CRUD, localStorage",
   "type": "module",
   "license": "MIT",
   "scripts": {

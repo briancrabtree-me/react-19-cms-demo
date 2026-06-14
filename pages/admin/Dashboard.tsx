@@ -3,7 +3,7 @@ import { resetToSeed } from '../../services/contentStore';
 
 export default function Dashboard() {
   const reset = () => {
-    if (!confirm('Reset all demo data to seed content?')) return;
+    if (!confirm('Reset all content to the seed JSON?')) return;
     resetToSeed();
     window.location.reload();
   };
@@ -12,7 +12,7 @@ export default function Dashboard() {
     <div className="admin-page">
       <header className="admin-page__header">
         <h1>Dashboard</h1>
-        <p>Browser-only CMS — content persists in localStorage on this device.</p>
+        <p>localStorage CMS — changes stay in this browser.</p>
       </header>
       <ul className="admin-quicklinks">
         <li>
@@ -28,15 +28,9 @@ export default function Dashboard() {
           <Link to="/admin/site">Site config &amp; navigation</Link>
         </li>
       </ul>
-      <fieldset className="admin-panel">
-        <legend>Demo tools</legend>
-        <p className="admin-hint">
-          Password is <code>demo</code>. Edits sync to the public site immediately on this browser.
-        </p>
-        <button type="button" className="admin-btn admin-btn--danger" onClick={reset}>
-          Reset demo data
-        </button>
-      </fieldset>
+      <button type="button" className="admin-btn admin-btn--danger" onClick={reset}>
+        Reset seed data
+      </button>
     </div>
   );
 }

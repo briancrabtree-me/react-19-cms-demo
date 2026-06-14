@@ -1,26 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deletePost, listPosts } from '../../services/contentStore';
 import type { BlogPost } from '../../lib/types/content';
 
 export default function BlogList() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const reload = () => setPosts(listPosts());
-
-  useEffect(() => {
-    reload();
-    setLoading(false);
-  }, []);
+  const [posts, setPosts] = useState(() => listPosts());
 
   const remove = (slug: string) => {
     if (!confirm(`Delete post "${slug}"?`)) return;
     deletePost(slug);
-    reload();
+    setPosts(listPosts());
   };
-
-  if (loading) return <p className="admin-hint">Loading…</p>;
 
   return (
     <div className="admin-page">

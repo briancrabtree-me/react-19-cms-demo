@@ -1,11 +1,11 @@
 export default function SaveBar({
   onSave,
-  saving,
+  saving = false,
   message,
   error,
 }: {
   onSave: () => void;
-  saving: boolean;
+  saving?: boolean;
   message?: string;
   error?: string;
 }) {

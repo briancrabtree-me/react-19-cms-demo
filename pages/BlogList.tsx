@@ -11,10 +11,7 @@ export default function BlogList() {
 
   return (
     <main className="site-main blog-page">
-      <header className="blog-header">
-        <h1>Blog</h1>
-        <p className="hero-lead">Posts managed from admin — stored in localStorage.</p>
-      </header>
+      <h1>Blog</h1>
       <ul className="blog-list">
         {postOrder.map((slug) => {
           const post = posts[slug];

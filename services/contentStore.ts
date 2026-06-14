@@ -12,12 +12,7 @@ const STORAGE_KEY = 'cms-demo:v1';
 type Listener = () => void;
 
 const listeners = new Set<Listener>();
-
 let cache: ContentBundle | null = null;
-
-function clone<T>(value: T): T {
-  return structuredClone(value);
-}
 
 function readStorage(): ContentBundle | null {
   if (typeof localStorage === 'undefined') return null;
@@ -33,7 +28,7 @@ function readStorage(): ContentBundle | null {
 function writeStorage(content: ContentBundle): void {
   if (typeof localStorage === 'undefined') return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
-  cache = clone(content);
+  cache = structuredClone(content);
   listeners.forEach((listener) => listener());
 }
 
@@ -44,13 +39,13 @@ function ensureContent(): ContentBundle {
     cache = stored;
     return stored;
   }
-  const seed = clone(defaultContent);
+  const seed = structuredClone(defaultContent);
   writeStorage(seed);
   return seed;
 }
 
 export function getContent(): ContentBundle {
-  return clone(ensureContent());
+  return structuredClone(ensureContent());
 }
 
 export function subscribe(listener: Listener): () => void {
@@ -59,12 +54,12 @@ export function subscribe(listener: Listener): () => void {
 }
 
 export function resetToSeed(): void {
-  writeStorage(clone(defaultContent));
+  writeStorage(structuredClone(defaultContent));
 }
 
 export function saveSite(site: SiteConfig): void {
   const content = ensureContent();
-  writeStorage({ ...content, site: clone(site) });
+  writeStorage({ ...content, site: structuredClone(site) });
 }
 
 export function listPages(): PageDocument[] {
@@ -75,7 +70,7 @@ export function listPages(): PageDocument[] {
 export function getPage(pageId: string): PageDocument | null {
   const content = ensureContent();
   const page = content.pages[pageId];
-  return page ? clone(page) : null;
+  return page ? structuredClone(page) : null;
 }
 
 export function savePage(pageId: string, page: PageDocument): void {
@@ -85,21 +80,19 @@ export function savePage(pageId: string, page: PageDocument): void {
   }
   writeStorage({
     ...content,
-    pages: { ...content.pages, [pageId]: clone(page) },
+    pages: { ...content.pages, [pageId]: structuredClone(page) },
   });
 }
 
 export function listPosts(): BlogPost[] {
   const content = ensureContent();
-  return content.postOrder
-    .map((slug) => content.posts[slug])
-    .filter((post): post is BlogPost => Boolean(post));
+  return content.postOrder.map((slug) => content.posts[slug]).filter(Boolean);
 }
 
 export function getPost(slug: string): BlogPost | null {
   const content = ensureContent();
   const post = content.posts[slug];
-  return post ? clone(post) : null;
+  return post ? structuredClone(post) : null;
 }
 
 export function savePost(post: BlogPost): void {
@@ -108,9 +101,9 @@ export function savePost(post: BlogPost): void {
   if (!/^[a-z0-9-]+$/.test(slug)) {
     throw new Error('Slug must be lowercase letters, numbers, and hyphens.');
   }
-  const nextPost = clone({ ...post, slug });
+  const nextPost = { ...post, slug };
   const isNew = !content.posts[slug];
-  const postOrder = isNew ? [slug, ...content.postOrder] : [...content.postOrder];
+  const postOrder = isNew ? [slug, ...content.postOrder] : content.postOrder;
   writeStorage({
     ...content,
     posts: { ...content.posts, [slug]: nextPost },
@@ -121,7 +114,8 @@ export function savePost(post: BlogPost): void {
 export function deletePost(slug: string): void {
   const content = ensureContent();
   if (!content.posts[slug]) return;
-  const { [slug]: _removed, ...posts } = content.posts;
+  const posts = { ...content.posts };
+  delete posts[slug];
   writeStorage({
     ...content,
     posts,
@@ -130,5 +124,5 @@ export function deletePost(slug: string): void {
 }
 
 export function getSite(): SiteConfig {
-  return clone(ensureContent().site);
+  return structuredClone(ensureContent().site);
 }

@@ -10,8 +10,7 @@ export default function Layout() {
       <header className="site-header">
         <nav className="site-nav" aria-label="Primary">
           <NavLink to="/" className="site-brand" end>
-            {site.siteName.split(' ')[0]}
-            <em>{site.siteName.includes('CMS') ? '-cms' : ''}</em>
+            north<em>line</em>
           </NavLink>
           <ul className="site-nav-links">
             {site.nav.map((item) => (

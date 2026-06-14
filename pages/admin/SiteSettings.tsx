@@ -5,7 +5,6 @@ import { getSite, saveSite } from '../../services/contentStore';
 
 export default function SiteSettings() {
   const [config, setConfig] = useState<SiteConfig | null>(null);
-  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -20,9 +19,8 @@ export default function SiteSettings() {
     setConfig({ ...config, nav });
   };
 
-  const save = async () => {
+  const save = () => {
     if (!config) return;
-    setSaving(true);
     setMessage('');
     setError('');
     try {
@@ -30,8 +28,6 @@ export default function SiteSettings() {
       setMessage('Saved.');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Save failed.');
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -79,7 +75,7 @@ export default function SiteSettings() {
         ))}
       </fieldset>
 
-      <SaveBar onSave={save} saving={saving} message={message} error={error} />
+      <SaveBar onSave={save} message={message} error={error} />
     </div>
   );
 }

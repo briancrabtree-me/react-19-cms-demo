@@ -22,7 +22,6 @@ export default function BlogEdit() {
   const isNew = slug === 'new';
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPost | null>(isNew ? emptyPost() : null);
-  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -31,23 +30,19 @@ export default function BlogEdit() {
     setPost(getPost(slug));
   }, [slug, isNew]);
 
-  const save = async () => {
+  const save = () => {
     if (!post) return;
-    setSaving(true);
     setMessage('');
     setError('');
     try {
       savePost(post);
       if (isNew) {
         navigate(`/admin/blog/${post.slug}`);
-        setMessage('Created.');
       } else {
         setMessage('Saved.');
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Save failed.');
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -114,7 +109,7 @@ export default function BlogEdit() {
 
       <SeoFields seo={post.seo} onChange={(seo) => setPost({ ...post, seo })} />
 
-      <SaveBar onSave={save} saving={saving} message={message} error={error} />
+      <SaveBar onSave={save} message={message} error={error} />
     </div>
   );
 }

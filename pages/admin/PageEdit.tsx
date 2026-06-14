@@ -16,7 +16,6 @@ import { getPage, savePage } from '../../services/contentStore';
 export default function PageEdit() {
   const { pageId = '' } = useParams<{ pageId: string }>();
   const [page, setPage] = useState<PageDocument | null>(null);
-  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -25,9 +24,8 @@ export default function PageEdit() {
     setPage(getPage(pageId));
   }, [pageId]);
 
-  const save = async () => {
+  const save = () => {
     if (!page || !pageId) return;
-    setSaving(true);
     setMessage('');
     setError('');
     try {
@@ -35,8 +33,6 @@ export default function PageEdit() {
       setMessage('Saved.');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Save failed.');
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -70,7 +66,7 @@ export default function PageEdit() {
         }
       />
 
-      <SaveBar onSave={save} saving={saving} message={message} error={error} />
+      <SaveBar onSave={save} message={message} error={error} />
     </div>
   );
 }

@@ -1,5 +1,3 @@
-/* Admin chrome — loaded only on /admin routes */
-
 .admin-shell {
   min-height: 100dvh;
   background: rgb(var(--bg-main));

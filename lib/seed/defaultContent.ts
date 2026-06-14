@@ -2,7 +2,7 @@ import type { ContentBundle } from '../types/content';
 
 export const defaultContent: ContentBundle = {
   site: {
-    siteName: 'React 19 CMS Demo',
+    siteName: 'Northline Studio',
     nav: [
       { label: 'Home', path: '/' },
       { label: 'About', path: '/about' },
@@ -13,29 +13,29 @@ export const defaultContent: ContentBundle = {
     home: {
       id: 'home',
       seo: {
-        title: 'React 19 CMS Demo',
-        description: 'Public site + admin CRUD with localStorage persistence.',
+        title: 'Northline Studio',
+        description: 'Small product studio — design, front-end, delivery.',
       },
       sections: [
         {
           type: 'hero',
-          headline: 'Build fast. Edit in admin.',
-          subhead: 'A minimal CMS demo styled like pure-react-19-vanilla-starter.',
+          headline: 'Ship the site, not the stack.',
+          subhead: 'React front-ends, vanilla CSS, fast deploys.',
         },
         {
           type: 'prose',
           blocks: [
             {
               type: 'heading',
-              text: 'What this is',
+              text: 'Work',
             },
             {
               type: 'paragraph',
-              text: 'This demo pairs a public marketing site with a lazy-loaded admin panel. All content lives in localStorage — no backend required.',
+              text: 'We build marketing sites and admin tools for teams that care about load time more than slide decks.',
             },
             {
               type: 'paragraph',
-              text: 'Sign in at /admin with password demo. Edit pages, manage blog posts, and update site navigation.',
+              text: 'Recent stack: React 19, Vite, static hosting, edge cache when it earns its keep.',
             },
           ],
         },
@@ -44,29 +44,29 @@ export const defaultContent: ContentBundle = {
     about: {
       id: 'about',
       seo: {
-        title: 'About — React 19 CMS Demo',
-        description: 'Architecture notes for the localStorage CMS demo.',
+        title: 'About — Northline Studio',
+        description: 'Who we are and how we work.',
       },
       sections: [
         {
           type: 'hero',
-          headline: 'About this demo',
-          subhead: 'React 19, vanilla CSS, react-router v7.',
+          headline: 'About',
+          subhead: 'Two people, no account managers.',
         },
         {
           type: 'prose',
           blocks: [
             {
               type: 'heading',
-              text: 'Stack',
+              text: 'Process',
             },
             {
               type: 'paragraph',
-              text: 'Vite 5, React 19.2, TypeScript, and vanilla CSS custom properties. Admin routes code-split into a separate chunk.',
+              text: 'Fixed pages, editable copy, blog when you need it. Admin stays out of the public bundle.',
             },
             {
               type: 'paragraph',
-              text: 'Swap contentStore.ts for a real API when you outgrow the browser-only demo.',
+              text: 'This repo is the stripped-down version we hand clients before wiring their API.',
             },
           ],
         },
@@ -74,28 +74,28 @@ export const defaultContent: ContentBundle = {
     },
   },
   posts: {
-    'welcome-to-the-demo': {
-      slug: 'welcome-to-the-demo',
-      title: 'Welcome to the demo',
-      publishedAt: '2026-06-01',
-      excerpt: 'Seed post — edit or delete from admin.',
+    'launch-checklist': {
+      slug: 'launch-checklist',
+      title: 'Launch checklist',
+      publishedAt: '2026-05-28',
+      excerpt: 'What we verify before DNS cutover.',
       seo: {
-        title: 'Welcome to the demo',
-        description: 'First seed blog post for the React 19 CMS demo.',
+        title: 'Launch checklist',
+        description: 'Pre-launch checks for a static React deploy.',
       },
-      body: 'This post ships with the demo. Open admin, edit the body, or create new posts. Changes persist in localStorage until you reset demo data.',
+      body: 'Cache headers, 404 shell, form endpoints, analytics deferred, admin behind auth. Run PageSpeed on the production URL twice — not localhost.',
     },
-    'localstorage-as-database': {
-      slug: 'localstorage-as-database',
-      title: 'localStorage as your database',
+    'field-notes': {
+      slug: 'field-notes',
+      title: 'Field notes',
       publishedAt: '2026-06-10',
-      excerpt: 'How the content store works in the browser.',
+      excerpt: 'Admin edits, public reads, same store.',
       seo: {
-        title: 'localStorage as your database',
-        description: 'Content persistence for the GitHub Pages CMS demo.',
+        title: 'Field notes',
+        description: 'Notes on the demo CMS wiring.',
       },
-      body: 'The content store writes a single JSON blob to localStorage under cms-demo:v1. Public pages and admin share the same store with a lightweight pub/sub for React updates.',
+      body: 'Pages are fixed IDs. Blog posts are full CRUD. Site nav comes from config. Wire your API behind contentStore when you outgrow the browser copy.',
     },
   },
-  postOrder: ['welcome-to-the-demo', 'localstorage-as-database'],
+  postOrder: ['launch-checklist', 'field-notes'],
 };
